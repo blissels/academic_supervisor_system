@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DemoController;
+use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,6 +13,15 @@ Route::get('1', function () {
   return view('demo.file1');
 });
 Route::get('2', [DemoController::class, 'index']);
+//  Lecturer Route
+Route::get('/lecturer', [LecturerController::class, 'index'])->name('lecturer-list');
+Route::get('/lecturer/create', [LecturerController::class, 'create'])->name('lecturer-create');
+Route::post('/lecturer/create', [LecturerController::class, 'store'])->name('lecturer-store');
+
+//  Student Route
+Route::get('/student', [StudentController::class, 'index'])->name('student-list');
+Route::get('/student/create', [StudentController::class, 'create'])->name('student-create');
+Route::post('/student/create', [StudentController::class, 'store'])->name('student-store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

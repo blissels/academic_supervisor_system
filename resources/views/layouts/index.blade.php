@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>
+  <title>Academic Supervisor System</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
   <link rel="icon" href="{{ asset('assets/img/kaiadmin/favicon.ico') }}" type="image/x-icon">
 
@@ -18,7 +18,7 @@
           "Font Awesome 5 Brands",
           "simple-line-icons",
         ],
-        urls: ["assets/css/fonts.min.css"],
+        urls: ["{{ asset('assets/css/fonts.min.css') }}"],
       },
       active: function () {
         sessionStorage.fonts = true;
