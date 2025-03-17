@@ -13,6 +13,12 @@
           <li class="nav-item"><a href="{{ route('student-list') }}">Student</a></li>
         </ul>
       </div>
+      @if (session('status'))
+        <div class="alert alert-success">{{ session('status') }}</div>
+      @endif
+      @error('err_msg')
+      <div class="alert alert-danger">{{ $message }}</div>
+      @enderror
       <div class="row">
         <div class="col-md-12">
           <div class="card">
@@ -52,23 +58,36 @@
                       <td>
                         <div class="form-button-action">
                           <button
-                              type="button"
                               data-bs-toggle="tooltip"
-                              title=""
-                              class="btn btn-link btn-primary"
-                              data-original-title="Edit Task"
+                              title="Student Detail"
+                              class="btn btn-link btn-success detail-data"
+                              data-original-title="Student Detail"
+                              data-url="{{ route('student-detail', [$student->nrp]) }}"
+                          >
+                            <i class="fas fa-info-circle"></i>
+                          </button>
+                          <button
+                              data-bs-toggle="tooltip"
+                              title="Edit Student"
+                              class="btn btn-link btn-primary edit-data"
+                              data-original-title="Edit Student"
+                              data-url="{{ route('student-update', [$student->nrp]) }}"
                           >
                             <i class="fa fa-edit"></i>
                           </button>
-                          <button
-                              type="button"
-                              data-bs-toggle="tooltip"
-                              title=""
-                              class="btn btn-link btn-danger"
-                              data-original-title="Remove"
-                          >
-                            <i class="fa fa-times"></i>
-                          </button>
+                          <form method="post" action="{{ route('student-delete', [$student->nrp]) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button
+                                type="submit"
+                                data-bs-toggle="tooltip"
+                                title="Delete Student"
+                                class="btn btn-link btn-danger delete-data"
+                                data-original-title="Remove Student"
+                            >
+                              <i class="fa fa-times"></i>
+                            </button>
+                          </form>
                         </div>
                       </td>
                     </tr>
@@ -89,9 +108,36 @@
 @endsection
 
 @section('ExtraJS')
+  <script src="{{ asset('assets/js/plugin/sweetalert2/sweetalert2.all.min.js') }}"></script>
   <script>
     $("#table-student").DataTable({
       pageLength: 25,
     });
+    $('.detail-data').click(function () {
+      window.location.href = $(this).data('url');
+    })
+    $('.edit-data').click(function () {
+      window.location.href = $(this).data('url');
+    })
+    $('.delete-data').click(function (e) {
+      e.preventDefault()
+      Swal.fire({
+        title: "Confirm to delete this data?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(e.target).closest("form").submit()
+        }
+      })
+    })
+    @error('err_msg')
+    $.notify({
+      message: "{{ $message }}"
+    }, {
+      type: "danger",
+      delay: 4000,
+    })
+    @enderror
   </script>
 @endsection

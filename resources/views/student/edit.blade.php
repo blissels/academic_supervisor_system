@@ -3,6 +3,9 @@
 @section('content')
   <div class="container">
     <div class="page-inner">
+      @error('err_msg')
+      <div class="alert alert-danger">{{ $message }}</div>
+      @enderror
       <div class="page-header">
         <h3 class="fw-bold mb-3">Student Management</h3>
         <ul class="breadcrumbs mb-3">
@@ -17,46 +20,47 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <form method="post" action="{{ route('student-store') }}">
+              <form method="post" action="{{ route('student-update', [$student->nrp]) }}">
                 @csrf
+                @method('PUT')
                 <div class="form-group">
                   <label for="nrp">NRP</label>
-                  <input type="text" name="nrp" id="nrp" maxlength="9" placeholder="e.g. 202072001" class="form-control" value="{{ old('nrp') }}" required autofocus>
+                  <input type="text" name="nrp" id="nrp" maxlength="9" placeholder="e.g. 202072001" class="form-control" value="{{ $student->nrp }}" required readonly>
                   @error('nrp')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                 </div>
                 <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" name="name" id="name" maxlength="100" placeholder="e.g. John Doe" class="form-control" value="{{ old('name') }}" required>
+                  <input type="text" name="name" id="name" maxlength="100" placeholder="e.g. John Doe" class="form-control" value="{{ $student->name }}" required autofocus>
                   @error('name')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                 </div>
                 <div class="form-group">
                   <label for="birth_date">Birth Date</label>
-                  <input type="date" name="birth_date" id="birth_date" class="form-control" value="{{ old('birth_date') }}" required>
+                  <input type="date" name="birth_date" id="birth_date" class="form-control" value="{{ $student->birth_date }}" required>
                   @error('birth_date')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input type="email" name="email" id="email" maxlength="50" placeholder="e.g. john.doe@email.com" class="form-control" value="{{ old('email') }}">
+                  <input type="email" name="email" id="email" maxlength="50" placeholder="e.g. john.doe@email.com" class="form-control" value="{{ $student->email }}">
                   @error('email')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                 </div>
                 <div class="form-group">
                   <label for="phone">Phone</label>
-                  <input type="tel" name="phone" id="phone" maxlength="16" placeholder="e.g. 628111222333" class="form-control" value="{{ old('phone') }}" required>
+                  <input type="tel" name="phone" id="phone" maxlength="16" placeholder="e.g. 628111222333" class="form-control" value="{{ $student->phone }}" required>
                   @error('phone')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                 </div>
                 <div class="form-group">
                   <label for="address">Address</label>
-                  <textarea name="address" id="address" maxlength="300" placeholder="e.g. Some street #1" rows="4" class="form-control" required>{{ old('address') }}</textarea>
+                  <textarea name="address" id="address" maxlength="300" placeholder="e.g. Some street #1" rows="4" class="form-control" required>{{ $student->address }}</textarea>
                   @error('address')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
@@ -66,7 +70,11 @@
                   <select name="lecturer_nik" id="lecturer_nik" class="form-control" required>
                     <option value="">-- Choose Academic Supervisor --</option>
                     @foreach($lecturers as $lecturer)
+                      @if ($lecturer->nik == $student->lecturer_nik)
+                      <option value="{{ $lecturer->nik }}" selected>{{ $lecturer->name }}</option>
+                      @else
                       <option value="{{ $lecturer->nik }}">{{ $lecturer->name }}</option>
+                      @endif
                     @endforeach
                   </select>
                   @error('lecturer_nik')

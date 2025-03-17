@@ -13,6 +13,12 @@
           <li class="nav-item"><a href="{{ route('lecturer-list') }}">Lecturer</a></li>
         </ul>
       </div>
+      @if (session('status'))
+        <div class="alert alert-success">{{ session('status') }}</div>
+      @endif
+      @error('err_msg')
+      <div class="alert alert-danger">{{ $message }}</div>
+      @enderror
       <div class="row">
         <div class="col-md-12">
           <div class="card">
@@ -52,23 +58,27 @@
                       <td>
                         <div class="form-button-action">
                           <button
-                              type="button"
                               data-bs-toggle="tooltip"
-                              title=""
-                              class="btn btn-link btn-primary"
-                              data-original-title="Edit Task"
+                              title="Edit Lecturer"
+                              class="btn btn-link btn-primary edit-data"
+                              data-original-title="Edit Lecturer"
+                              data-url="{{ route('lecturer-update', [$lecturer->nik]) }}"
                           >
                             <i class="fa fa-edit"></i>
                           </button>
-                          <button
-                              type="button"
-                              data-bs-toggle="tooltip"
-                              title=""
-                              class="btn btn-link btn-danger"
-                              data-original-title="Remove"
-                          >
-                            <i class="fa fa-times"></i>
-                          </button>
+                          <form method="post" action="{{ route('lecturer-delete', [$lecturer->nik]) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button
+                                type="submit"
+                                data-bs-toggle="tooltip"
+                                title="Delete Lecturer"
+                                class="btn btn-link btn-danger delete-data"
+                                data-original-title="Remove Lecturer"
+                            >
+                              <i class="fa fa-times"></i>
+                            </button>
+                          </form>
                         </div>
                       </td>
                     </tr>
@@ -89,9 +99,33 @@
 @endsection
 
 @section('ExtraJS')
+  <script src="{{ asset('assets/js/plugin/sweetalert2/sweetalert2.all.min.js') }}"></script>
   <script>
     $("#table-lecturer").DataTable({
       pageLength: 25,
     });
+    $('.edit-data').click(function () {
+      window.location.href = $(this).data('url');
+    })
+    $('.delete-data').click(function (e) {
+      e.preventDefault()
+      Swal.fire({
+        title: "Confirm to delete this data?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $(e.target).closest('form').submit()
+        }
+      })
+    })
+    @error('err_msg')
+    $.notify({
+      message: "{{ $message }}"
+    }, {
+      type: "danger",
+      delay: 4000,
+    })
+    @enderror
   </script>
 @endsection

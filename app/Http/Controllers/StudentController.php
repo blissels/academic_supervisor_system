@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lecturer;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -42,38 +43,77 @@ class StudentController extends Controller
     ]);
     $student = new Student($validatedData);
     $student->save();
-    return redirect()->route('student-list');
+    return redirect()->route('student-list')
+      ->with('status', 'Student successfully added!');
   }
 
   /**
    * Display the specified resource.
    */
-  public function show(Student $student)
+  public function show(string $nrp)
   {
-    //
+    $student = Student::find($nrp);
+    if ($student == null) {
+      return back()->withErrors(['err_msg' => 'Student not found!']);
+    }
+    return view('student.detail')
+      ->with('student', $student);
   }
 
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(Student $student)
+  public function edit(string $nrp)
   {
-    //
+    $student = Student::find($nrp);
+    if ($student == null) {
+      return back()->withErrors(['err_msg' => 'Student not found!']);
+    }
+    return view('student.edit')
+      ->with('lecturers', Lecturer::all())
+      ->with('student', $student);
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Student $student)
+  public function update(Request $request, string $nrp)
   {
-    //
+    $student = Student::find($nrp);
+    if ($student == null) {
+      return back()->withErrors(['err_msg' => 'Student not found!']);
+    }
+    $validatedData = $request->validate([
+      'nrp' => ['required', 'string', 'max:9', Rule::unique('student', 'nrp')->ignore($student->nrp, 'nrp')],
+      'name' => ['required', 'string', 'max:100'],
+      'birth_date' => ['required'],
+      'phone' => ['required', 'numeric'],
+      'email' => ['nullable', 'email', 'max:50', Rule::unique('student', 'email')->ignore($student->nrp, 'nrp')],
+      'address' => ['required', 'string', 'max:300'],
+      'lecturer_nik' => ['required', 'string'],
+    ]);
+    $student['name'] = $validatedData['name'];
+    $student['birth_date'] = $validatedData['birth_date'];
+    $student['phone'] = $validatedData['phone'];
+    $student['email'] = $validatedData['email'];
+    $student['address'] = $validatedData['address'];
+    $student['lecturer_nik'] = $validatedData['lecturer_nik'];
+    $student->save();
+    return redirect()->route('student-list')
+      ->with('status', 'Student successfully updated!');
   }
 
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Student $student)
+  public function destroy(string $nrp)
   {
-    //
+    $student = Student::find($nrp);
+    if ($student == null) {
+      return back()->withErrors(['err_msg' => 'Student not found!']);
+    }
+    $student->delete();
+    return redirect()->route('student-list')
+      ->with('status', 'Student successfully deleted!');
   }
 }

@@ -17,11 +17,18 @@ Route::get('2', [DemoController::class, 'index']);
 Route::get('/lecturer', [LecturerController::class, 'index'])->name('lecturer-list');
 Route::get('/lecturer/create', [LecturerController::class, 'create'])->name('lecturer-create');
 Route::post('/lecturer/create', [LecturerController::class, 'store'])->name('lecturer-store');
+Route::get('/lecturer/edit/{nik}', [LecturerController::class, 'edit'])->name('lecturer-edit');
+Route::put('/lecturer/edit/{nik}', [LecturerController::class, 'update'])->name('lecturer-update');
+Route::delete('/lecturer/delete/{nik}', [LecturerController::class, 'destroy'])->name('lecturer-delete');
 
 //  Student Route
 Route::get('/student', [StudentController::class, 'index'])->name('student-list');
 Route::get('/student/create', [StudentController::class, 'create'])->name('student-create');
 Route::post('/student/create', [StudentController::class, 'store'])->name('student-store');
+Route::get('/student/edit/{nrp}', [StudentController::class, 'edit'])->name('student-edit');
+Route::put('/student/edit/{nrp}', [StudentController::class, 'update'])->name('student-update');
+Route::delete('/student/delete/{nrp}', [StudentController::class, 'destroy'])->name('student-delete');
+Route::get('/student/detail/{nrp}', [StudentController::class, 'show'])->name('student-detail');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
