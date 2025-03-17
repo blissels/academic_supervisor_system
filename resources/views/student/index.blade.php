@@ -37,7 +37,7 @@
                     <th>Name</th>
                     <th>Birth Date</th>
                     <th>Phone</th>
-                    <th>Students Count</th>
+                    <th>Academic Supervisor</th>
                     <th style="width: 10%">Action</th>
                   </tr>
                   </thead>
