@@ -18,6 +18,8 @@ Route::get('/lecturer', [LecturerController::class, 'index'])->name('lecturer-li
 Route::get('/lecturer/create', [LecturerController::class, 'create'])->name('lecturer-create');
 Route::post('/lecturer/create', [LecturerController::class, 'store'])->name('lecturer-store');
 Route::get('/lecturer/edit/{nik}', [LecturerController::class, 'edit'])->name('lecturer-edit');
+Route::get('/lecturer/edit/{dosen}', [LecturerController::class, 'edit'])->name('lecturer-edit');
+
 Route::put('/lecturer/edit/{nik}', [LecturerController::class, 'update'])->name('lecturer-update');
 Route::delete('/lecturer/delete/{nik}', [LecturerController::class, 'destroy'])->name('lecturer-delete');
 

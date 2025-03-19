@@ -17,7 +17,7 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-body">
-              <form method="post" action="{{ route('lecturer-update', [$lecturer->nik]) }}">
+              <form method="post" action="#">
                 @csrf
                 @method('PUT')
                 <div class="form-group">

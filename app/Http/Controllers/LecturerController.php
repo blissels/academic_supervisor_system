@@ -53,12 +53,18 @@ class LecturerController extends Controller
   /**
    * Show the form for editing the specified resource.
    */
-  public function edit(string $nik)
+  // public function edit(string $nik)
+  // {
+  //   $lecturer = Lecturer::find($nik);
+  //   if ($lecturer == null) {
+  //     return back()->withErrors(['err_msg' => 'Lecturer not found!']);
+  //   }
+  //   return view('lecturer.edit')
+  //     ->with('lecturer', $lecturer);
+  // }
+
+  public function edit(Lecturer $lecturer)
   {
-    $lecturer = Lecturer::find($nik);
-    if ($lecturer == null) {
-      return back()->withErrors(['err_msg' => 'Lecturer not found!']);
-    }
     return view('lecturer.edit')
       ->with('lecturer', $lecturer);
   }
